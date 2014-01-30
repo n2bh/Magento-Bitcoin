@@ -13,9 +13,9 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
  *
- * @category    Magento Commerce
+ * @category    Magento
  * @package     Appmerce_Bitcoin
- * @copyright   Copyright (c) 2011-2013 Appmerce (http://www.appmerce.com)
+ * @copyright   Copyright (c) 2011-2014 Appmerce (http://www.appmerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -93,13 +93,6 @@ class Appmerce_Bitcoin_Model_Api_Pull extends Varien_Object
             $amount = $order->getPayment()->getAdditionalInformation('amount');
             $account = $this->getApi()->getBitcoin()->getAccount($address);
             $transactions = $this->getApi()->getBitcoin()->listTransactions($account);
-
-            // Blockchain handles listtransactions differently
-            $host = $this->getApi()->getConfigData('rpc_host');
-            if (strpos($host, 'blockchain.info') !== FALSE) {
-                $transactions = $transactions['transactions'];
-            }
-
             $minimum_confirmations = (int)$order->getPayment()->getAdditionalInformation('minimum_confirmations');
 
             // Check transactions / balance
