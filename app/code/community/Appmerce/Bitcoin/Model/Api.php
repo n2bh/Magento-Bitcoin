@@ -147,8 +147,21 @@ class Appmerce_Bitcoin_Model_Api extends Mage_Payment_Model_Method_Abstract
     public function getAmount($order)
     {
         $price = $order->getGrandTotal();
-        $rate = Mage::helper('bitcoin')->getExchangeRate();
-        return number_format($price / $rate, 8);
+        $currency = $this->getCurrencyCode();
+
+        // Do not convert native currency
+        switch ($currency) {
+            case 'XBT' :
+            case 'BTC' :
+                $amount = $price;
+                break;
+
+            default :
+                $rate = Mage::helper('bitcoin')->getExchangeRate();
+                $amount = $price / $rate;
+        }
+
+        return number_format($amount, 8);
     }
 
     /**
